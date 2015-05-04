@@ -4,43 +4,39 @@ Creates a new connection to the Apple Push Notification Service.
 
 Options:
 
- - `cert` {Buffer|String} TThe filename of the connection certificate to load from disk, or a Buffer/String containing the certificate data. (Defaults to: `cert.pem`)
+ - `cert` {Buffer|String} The filename of the connection certificate to load from disk, or a Buffer/String containing the certificate data. (Defaults to: `cert.pem`)
 
  - `key` {Buffer|String} The filename of the connection key to load from disk, or a Buffer/String containing the key data. (Defaults to: `key.pem`)
 
  - `ca` An array of trusted certificates. Each element should contain either a filename to load, or a Buffer/String (in PEM format) to be used directly. If this is omitted several well known "root" CAs will be used. - You may need to use this as some environments don't include the CA used by Apple (entrust_2048).
 
- - `pfx` {Buffer|String} File path for private key, certificate and CA certs in PFX or PKCS12 format, or a Buffer containing the PFX data. If supplied will be used instead of certificate and key above.
+ - `pfx` {Buffer|String} File path for private key, certificate and CA certs in PFX or PKCS12 format, or a Buffer containing the PFX data. If supplied will always be used instead of certificate and key above.
 
  - `passphrase` {String} The passphrase for the connection key, if required
 
  - `production` {Boolean} Specifies which environment to connect to: Production (if true) or Sandbox - The hostname will be set automatically. (Defaults to NODE_ENV == "production", i.e. false unless the NODE_ENV environment variable is set accordingly)
 
+ - `voip` {Boolean} Enable when you are using a VoIP certificate to enable paylods up to 4096 bytes.
+
  - `port` {Number} Gateway port (Defaults to: `2195`)
 
  - `rejectUnauthorized` {Boolean} Reject Unauthorized property to be passed through to tls.connect() (Defaults to `true`)
 
- - `enhanced` {Boolean} Whether to use the enhanced notification format (recommended, defaults to: `true`)
+ - `cacheLength` {Number} Number of notifications to cache for error purposes (See "Handling Errors" below, (Defaults to: 1000)
 
- - `cacheLength` {Number} Number of notifications to cache for error purposes (See "Handling Errors" below, (Defaults to: 100)
-
- - `autoAdjustCache` {Boolean} Whether the cache should grow in response to messages being lost after errors. (Will still emit a 'cacheTooSmall' event) (Defaults to: `false`)
+ - `autoAdjustCache` {Boolean} Whether the cache should grow in response to messages being lost after errors. (Will still emit a 'cacheTooSmall' event) (Defaults to: `true`)
 
  - `maxConnections` {Number} The maximum number of connections to create for sending messages. (Defaults to: `1`)
 
  - `connectTimeout` {Number} The duration of time the module should wait, in milliseconds, when trying to establish a connection to Apple before failing. 0 = Disabled. {Defaults to: `10000`}
 
- - `connectionTimeout` {Number} The duration the socket should stay alive with no activity in milliseconds. 0 = Disabled. (Defaults to: `0`)
+ - `connectionTimeout` {Number} The duration the socket should stay alive with no activity in milliseconds. 0 = Disabled. (Defaults to: `3600000` - 1h)
 
-  - `connectionRetryLimit` {Number} The maximum number of connection failures that will be tolerated before `apn` will "terminate". [See below.](#connectionretrylimit) (Defaults to: 10)
+ - `connectionRetryLimit` {Number} The maximum number of connection failures that will be tolerated before `apn` will "terminate". [See below.](#connection-retry-limit) (Defaults to: 10)
 
  - `buffersNotifications` {Boolean} Whether to buffer notifications and resend them after failure. (Defaults to: `true`)
 
  - `fastMode` {Boolean} Whether to aggresively empty the notification buffer while connected - if set to true node-apn may enter a tight loop under heavy load while delivering notifications. (Defaults to: `false`)
-
- - `legacy` {Boolean} Whether to use the pre-iOS 7 protocol format. (Defaults to `false`)
-
- - `largePayloads` {Boolean} Whether to raise the notification limit from 256 bytes to 2048 bytes - not yet available in Production, automatically enabled for Sandbox.
 
 ##### Connection retry limit
 TLS errors such as expired or invalid certificates will cause an error to be emitted, but in this case it is futile for `apn` to continue attempting to connect. There may also be other cases where connectivity issues mean that a process attempting to send notifications may simply become blocked with an ever-increasing queue of notifications. To attempt to combat this a (configurable) retry limit of 10 has been introduced. If ten consecutive connection failures occur then `apn` will emit an `error` event for the connection, then a `transmissionError` event will be emitted for *each* notification in the queue, with the error code `connectionRetryLimitExceeded` (514).

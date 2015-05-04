@@ -1,5 +1,29 @@
 ## Changelog
 
+1.7.3:
+
+* Added support for increased payload length for VoIP applications (Closes #207)
+* Fixed a bug with trimming UTF-16 encoded payloads
+* Dropped support for node v0.6 as it doesn't support UTF-16 surrogate pairs. Plus it's old. It'll still work if needed though, if you use UTF-8.
+
+1.7.2:
+
+* Fixed: #238, only emit `error` when the problem is unrecoverable. Any use of `node-apn` should have an `error` listener attached to prevent uncaught exceptions.
+* Various coding style improvements.
+* CI.
+* Removed legacy protocol support. I don't see any reason to keep it around, let me know if this causes you any problems.
+
+1.7.1:
+
+* Fixed: #224, always passing a CA value even if no certificates were specified. In this case the TLS library will not use the built in root certificates and will always fail to trust the server certificate.
+* Changed: Socket timeout default has changed for disabled to 1 hour.
+* Documentation fixes
+
+1.7.0:
+
+* Added: Credential validator to catch common configuration errors.
+* Fixed: Documentation errors.
+
 1.6.2:
 
 * Updated maximum payload size to 2048 bytes. (See #181).

@@ -1,6 +1,36 @@
 #node-apn
 
-A Node.js module for interfacing with the Apple Push Notification service.
+> A Node.js module for interfacing with the Apple Push Notification service.
+
+[![NPM][npm-image] ][npm-url]
+
+[![Build status][ci-image] ][ci-url]
+[![Code coverage][coverage-image]][coverage-url]
+[![Codacy][codacy-image]][codacy-url]
+
+[![dependencies][dependencies-image]][dependencies-url]
+[![devdependencies][devdependencies-image]][devdependencies-url]
+
+[![Issue Stats][issuestats-pr-image]][issuestats-url]
+[![Issue Stats][issuestats-image]][issuestats-url]
+
+[npm-image]:https://nodei.co/npm/apn.png?downloads=true
+[npm-url]:https://npmjs.com/package/apn
+[ci-image]:https://travis-ci.org/argon/node-apn.png?branch=master
+[ci-url]:https://travis-ci.org/argon/node-apn
+[coverage-image]:https://coveralls.io/repos/argon/node-apn/badge.svg?branch=master
+[coverage-url]:https://coveralls.io/r/argon/node-apn
+[codacy-image]:https://www.codacy.com/project/badge/e7735fbe0db244f3b310657d0dabaa11
+[codacy-url]:https://www.codacy.com/public/argon/node-apn
+
+[dependencies-image]:https://david-dm.org/argon/node-apn.png
+[dependencies-url]:https://david-dm.org/argon/node-apn
+[devdependencies-image]:https://david-dm.org/argon/node-apn/dev-status.png
+[devdependencies-url]:https://david-dm.org/argon/node-apn#info=devDependencies
+
+[issuestats-image]:http://issuestats.com/github/argon/node-apn/badge/issue
+[issuestats-pr-image]:http://issuestats.com/github/argon/node-apn/badge/pr
+[issuestats-url]:http://issuestats.com/github/argon/node-apn
 
 ## Features
 
@@ -31,13 +61,17 @@ This is intended as a brief introduction, please refer to the documentation in `
 	var apn = require('apn');
 
 ### Connecting
-Create a new connection to the APN gateway server, passing a dictionary of options to the constructor. If you name your certificate and key files appropriately (`cert.pem` and `key.pem`) then the defaults should be suitable to get you up and running. By default the module will connect to the sandbox environment unless the environment variable `NODE_ENV=production` is set. For more information consult the documentation (in doc/apn.markdown).
+Create a new connection to the APN gateway server, passing a dictionary of options to the constructor. If you name your certificate and key files appropriately (`cert.pem` and `key.pem`) then the defaults should be suitable to get you up and running.
 
 ```javascript
 	var options = { };
 
 	var apnConnection = new apn.Connection(options);
 ```
+
+By default, if the environment variable `NODE_ENV=production` is set, the module will connect to the production gateway. Otherwise it will connect to the sandbox. This along with many other settings can be overriden with the options object.
+
+For more information about configuration options consult the [documentation](doc/connection.markdown).
 
 Help with preparing the key and certificate files for connection can be found in the [wiki][certificateWiki]
 
